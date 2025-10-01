@@ -26,8 +26,8 @@ namespace MemoryGame
         GameObject CreatePooledItem()
         {
             var go = Instantiate(pollItems);
-            var returnToPool = go.GetComponent<ReturnToPool>();
-            returnToPool.pool = PoolGameobject;
+            var returnToPool = go.GetComponent<IReturnToPool>();
+            returnToPool.SetPool(PoolGameobject);
 
             return go;
         }

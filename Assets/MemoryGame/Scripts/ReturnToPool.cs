@@ -5,16 +5,19 @@ using UnityEngine.Pool;
 
 namespace MemoryGame
 {
-    public class ReturnToPool : MonoBehaviour
+    public class ReturnToPool : MonoBehaviour ,IReturnToPool
     {
-        public IObjectPool<GameObject> pool { get; set; }
+        private IObjectPool<GameObject> pool { get; set; }
 
         public void ReturnToPoolGameobject()
         {
-            // Return to the pool
             pool.Release(gameObject);
         }
 
+        public void SetPool(IObjectPool<GameObject> poolObj)
+        {
+            pool = poolObj;
+        }
     }
 }
 

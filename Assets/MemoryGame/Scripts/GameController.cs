@@ -11,24 +11,34 @@ namespace MemoryGame
 
         public static event Action<List<int>> OnGameStart;
 
+        private WinChecker lastWinChecker;
+
         private void Start()
         {
             SetupGame();
-            SpawnWinChecker();
         }
         private void OnEnable()
         {
-            WinChecker.OnWinCheckerReset += SpawnWinChecker;
+            Card.OnCardClicked += OnCardClicked;
         }
         private void OnDisable()
         {
-            WinChecker.OnWinCheckerReset -= SpawnWinChecker;
+            Card.OnCardClicked -= OnCardClicked;
         }
-        private void SpawnWinChecker()
-        {
-            Debug.Log("Spawn new win checker");
 
-            GameObject go = winCheckerPool.PoolGameobject.Get();
+        private void OnCardClicked(Card card)
+        {
+            if(lastWinChecker != null && lastWinChecker.IsBusy() == false)
+            {
+                lastWinChecker.OnCardClicked(card);
+            }
+            else
+            {
+                GameObject go = winCheckerPool.PoolGameobject.Get();
+                lastWinChecker = go.GetComponent<WinChecker>();
+
+                lastWinChecker.OnCardClicked(card);
+            }
         }
         private void SetupGame()
         {

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,31 +8,38 @@ namespace MemoryGame
 {
     public class WinChecker : MonoBehaviour
     {
-        [SerializeField] private ReturnToPool returnToPool;
-
-        public List<Card> cards = new List<Card>();
+        private IReturnToPool returnToPool;
+        private List<Card> cards = new List<Card>();
+        private bool busy = false;
 
         public static event Action OnWinCheckerReset;
 
-        private void OnEnable()
+        private void Awake()
         {
-            Card.OnCardClicked += OnCardClicked;
+            returnToPool = GetComponent<IReturnToPool>();
         }
-        private void OnDisable()
+        public void OnCardClicked(Card card)
         {
-            Card.OnCardClicked -= OnCardClicked;
-        }
+            if (busy) return;
 
-        private void OnCardClicked(Card card)
+            StopAllCoroutines();
+            StartCoroutine(UpdateWinChecker(card));
+        }
+        private IEnumerator UpdateWinChecker(Card card)
         {
             cards.Add(card);
 
             if (cards.Count > 1)
             {
-               
-                if(CheckForWin())
+                busy = true;
+
+                yield return new WaitForSeconds(1);
+                if (CheckForWin())
                 {
-                    Debug.Log("Win");
+                    foreach (var item in cards)
+                    {
+                        item.gameObject.SetActive(false);
+                    }
                 }
                 else
                 {
@@ -43,6 +51,8 @@ namespace MemoryGame
                 OnWinCheckerReset?.Invoke();
 
                 returnToPool.ReturnToPoolGameobject();
+
+                busy = false;
             }
         }
 
@@ -50,6 +60,15 @@ namespace MemoryGame
         {
             bool matched = cards.All(value => value.id == cards[0].id);
             return matched;
+        }
+        public bool IsBusy()
+        {
+            return busy;
+        }
+
+        private void OnDisable()
+        {
+            StopAllCoroutines();
         }
     }
 }

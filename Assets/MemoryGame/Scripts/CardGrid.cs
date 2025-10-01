@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace MemoryGame
@@ -12,18 +14,19 @@ namespace MemoryGame
         [SerializeField] private GridLayoutGroup gridLayout;
         [SerializeField] private RectTransform panelRectTransform;
 
-        void SteupBoard(List<int> cards)
-        {
-            UpdateLayout(gameSetting.rows, gameSetting.columns, gameSetting.spacing);
-            SpawnCards(cards);
-        }
         private void OnEnable()
         {
-            GameController.OnGameStart += SteupBoard;
+            GameController.OnGameStart += SetupBoard;
         }
         private void OnDisable()
         {
-            GameController.OnGameStart -= SteupBoard;
+            GameController.OnGameStart -= SetupBoard;
+            StopAllCoroutines();
+        }
+        private void SetupBoard(List<int> cards)
+        {
+            UpdateLayout(gameSetting.rows, gameSetting.columns,new Vector2(10,10));
+            SpawnCards(cards);
         }
         private void UpdateLayout(int rows , int cols , Vector2 spacing)
         {
@@ -40,6 +43,17 @@ namespace MemoryGame
         }
         private void SpawnCards(List<int> cards)
         {
+            StartCoroutine(SpawnCardRoutine(cards));
+        }
+        private IEnumerator SpawnCardRoutine(List<int> cards)
+        {
+            foreach (RectTransform card in panelRectTransform)
+            {
+                card.gameObject.GetComponent<IReturnToPool>().ReturnToPoolGameobject();
+            }
+
+            gridLayout.enabled = true;
+
             int count = cards.Count;
             for (int i = 0; i < count; i++)
             {
@@ -50,6 +64,10 @@ namespace MemoryGame
                 Card card = go.GetComponent<Card>();
                 card.UpdateCard(cards[i]);
             }
+
+            yield return new WaitForSeconds(1);
+
+            gridLayout.enabled = false;
         }
     }
 }

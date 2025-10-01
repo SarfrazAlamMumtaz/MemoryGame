@@ -471,6 +471,9 @@ MonoBehaviour:
   poolCards: {fileID: 500235239}
   gridLayout: {fileID: 1651717824}
   panelRectTransform: {fileID: 1651717821}
+  OnCardSpawnedCompleted:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1357934203
 GameObject:
   m_ObjectHideFlags: 0
@@ -876,6 +879,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameSetting: {fileID: 11400000, guid: 477b31566cd62944db3f10fe4d9e2979, type: 2}
   layoutText: {fileID: 1949082803}
+  gridLayoutGroup: {fileID: 1651717824}
 --- !u!1 &2054392698
 GameObject:
   m_ObjectHideFlags: 0

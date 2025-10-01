@@ -14,6 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rows: 2
   columns: 3
-  spacing: {x: 10, y: 10}
   collectionChecks: 1
   maxPoolSize: 10

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 namespace MemoryGame
@@ -11,12 +12,11 @@ namespace MemoryGame
     {
         [SerializeField] private GameSetting gameSetting;
         [SerializeField] private TextMeshProUGUI layoutText;
-       
+
         void Start()
         {
             LayoutDisplay();
         }
-
         public void LayoutDisplay()
         {
             StringBuilder layout = new StringBuilder();

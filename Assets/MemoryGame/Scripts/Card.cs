@@ -25,8 +25,6 @@ namespace MemoryGame
             if (active) return;
 
             OnCardClicked?.Invoke(this);
-
-            Debug.Log($"ID : " + id);
             ToggleVisual();
         }
 
