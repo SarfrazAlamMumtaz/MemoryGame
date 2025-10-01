@@ -12,6 +12,8 @@ namespace MemoryGame
         private List<Card> cards = new List<Card>();
         private bool busy = false;
 
+        public static event Action OnNewWinCheckerSpawn;
+
         private void Awake()
         {
             returnToPool = GetComponent<IReturnToPool>();
@@ -38,8 +40,7 @@ namespace MemoryGame
 
                 if (Won())
                 {
-                    gameController.ResetlastWinChecker();
-                    Debug.Log("Win");
+                    gameController.OnWin();
                     yield return new WaitForSeconds(1);
 
                     foreach (var item in cards)
@@ -49,8 +50,7 @@ namespace MemoryGame
                 }
                 else
                 {
-                    gameController.ResetlastWinChecker();
-                    Debug.Log("Lose");
+                    gameController.OnLose();
                     yield return new WaitForSeconds(1);
 
                     foreach (var item in cards)

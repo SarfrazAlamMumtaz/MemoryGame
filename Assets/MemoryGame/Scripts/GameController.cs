@@ -11,6 +11,8 @@ namespace MemoryGame
         [SerializeField] private Pool winCheckerPool;
 
         public static event Action<List<int>> OnGameStart;
+        public static event Action ActionWin;
+        public static event Action ActionTurn;
 
         private WinChecker lastWinChecker;
 
@@ -25,6 +27,17 @@ namespace MemoryGame
         private void OnDisable()
         {
             Card.OnCardClicked -= OnCardClicked;
+        }
+        public void OnWin()
+        {
+            ActionTurn.Invoke();
+            ActionWin.Invoke();
+            ResetlastWinChecker();
+        }
+        public void OnLose()
+        {
+            ActionTurn.Invoke();
+            ResetlastWinChecker();
         }
         private void OnCardClicked(Card card)
         {
@@ -41,7 +54,7 @@ namespace MemoryGame
                 lastWinChecker.OnCardClicked(card,this);
             }
         }
-        public void ResetlastWinChecker()
+        private void ResetlastWinChecker()
         {
             lastWinChecker = null;
         }

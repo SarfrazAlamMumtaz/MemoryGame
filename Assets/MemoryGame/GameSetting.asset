@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d772d9c65d35d847b9bd59cb5faeb0e, type: 3}
   m_Name: GameSetting
   m_EditorClassIdentifier: 
-  rows: 2
-  columns: 3
+  rows: 5
+  columns: 6
   collectionChecks: 1
   maxPoolSize: 10
