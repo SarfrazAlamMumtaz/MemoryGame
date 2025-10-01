@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,46 +6,47 @@ namespace MemoryGame
 {
     public class GameController : MonoBehaviour
     {
-        public List<Card> spawnedCards = new List<Card>();
+        [SerializeField] private GameSetting gameSetting;
+        [SerializeField] private Pool winCheckerPool;
 
-        void Start()
+        public static event Action<List<int>> OnGameStart;
+
+        private void Start()
         {
-           
+            SetupGame();
+            SpawnWinChecker();
         }
-
         private void OnEnable()
         {
-            CardGrid.OnCardPopulated += SetupGame;
+            WinChecker.OnWinCheckerReset += SpawnWinChecker;
         }
         private void OnDisable()
         {
-            CardGrid.OnCardPopulated -= SetupGame;
+            WinChecker.OnWinCheckerReset -= SpawnWinChecker;
         }
-       
-        private void SetupGame(List<Card> cards)
+        private void SpawnWinChecker()
         {
-            spawnedCards.Clear();
-            spawnedCards.AddRange(cards);
+            Debug.Log("Spawn new win checker");
 
-            int matchedCards = spawnedCards.Count / 2;
-
-
-            //foreach (var item in spawnedCards)
-            //{
-            //    item.UpdateCard();
-            //}
-
+            GameObject go = winCheckerPool.PoolGameobject.Get();
         }
-        public void Shuffle<T>(List<T> list)
+        private void SetupGame()
         {
-            for (int i = 0; i < list.Count; i++)
+            int totalCards = (gameSetting.rows * gameSetting.columns);
+            int matchedCards = totalCards / 2;
+
+            List<int> cardsId = new List<int>(new int[totalCards]);
+
+            for (int i = 0; i < matchedCards; i++)
             {
-                int randomIndex = Random.Range(i, list.Count);
-                // Swap
-                T temp = list[i];
-                list[i] = list[randomIndex];
-                list[randomIndex] = temp;
+                cardsId[i] = i;
+                cardsId[matchedCards + i] = i;
             }
+
+            //shuffle
+            cardsId.Shuffle();
+
+            OnGameStart?.Invoke(cardsId);
         }
     }
 }

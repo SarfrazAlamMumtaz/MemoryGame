@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,12 +12,18 @@ namespace MemoryGame
         [SerializeField] private GridLayoutGroup gridLayout;
         [SerializeField] private RectTransform panelRectTransform;
 
-        public static event Action<List<Card>> OnCardPopulated;
-
-        void Start()
+        void SteupBoard(List<int> cards)
         {
             UpdateLayout(gameSetting.rows, gameSetting.columns, gameSetting.spacing);
-            SpawnCards();
+            SpawnCards(cards);
+        }
+        private void OnEnable()
+        {
+            GameController.OnGameStart += SteupBoard;
+        }
+        private void OnDisable()
+        {
+            GameController.OnGameStart -= SteupBoard;
         }
         private void UpdateLayout(int rows , int cols , Vector2 spacing)
         {
@@ -34,23 +38,18 @@ namespace MemoryGame
             gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             gridLayout.constraintCount = cols;
         }
-        private void SpawnCards()
+        private void SpawnCards(List<int> cards)
         {
-            List<Card> cards = new List<Card>();
-            for (int i = 0; i < gameSetting.rows; i++)
+            int count = cards.Count;
+            for (int i = 0; i < count; i++)
             {
-                for (int j = 0; j < gameSetting.columns; j++)
-                {
-                    GameObject go = poolCards.PoolGameobject.Get();
-                    go.transform.SetParent(panelRectTransform, true);
-                    go.transform.localScale = Vector3.one;
+                GameObject go = poolCards.PoolGameobject.Get();
+                go.transform.SetParent(panelRectTransform, true);
+                go.transform.localScale = Vector3.one;
 
-                    Card card = go.GetComponent<Card>();
-                    cards.Add(card);
-                }
+                Card card = go.GetComponent<Card>();
+                card.UpdateCard(cards[i]);
             }
-
-            OnCardPopulated?.Invoke(cards);
         }
     }
 }

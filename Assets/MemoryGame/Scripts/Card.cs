@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,8 +10,11 @@ namespace MemoryGame
         [SerializeField] private GameObject cardVisual;
         [SerializeField] private TextMeshProUGUI textVisual;
 
+        public int id { get; private set; }
+
         private bool active = false;
-        private int id;
+
+        public static event Action<Card> OnCardClicked;
 
         private void Start()
         {
@@ -20,6 +22,10 @@ namespace MemoryGame
         }
         public void OnPointerDown(PointerEventData eventData)
         {
+            if (active) return;
+
+            OnCardClicked?.Invoke(this);
+
             Debug.Log($"ID : " + id);
             ToggleVisual();
         }
@@ -28,7 +34,7 @@ namespace MemoryGame
         {
             this.id = id;
 
-            //remove
+            //remove before commit
             textVisual.SetText(id.ToString());
         }
 
