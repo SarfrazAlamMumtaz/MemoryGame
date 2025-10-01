@@ -8,49 +8,38 @@ namespace MemoryGame
 {
     public class CardGrid : MonoBehaviour
     {
+        [SerializeField] private GameSetting gameSetting;
+
         [SerializeField] private Pool poolCards;
         [SerializeField] private GridLayoutGroup gridLayout;
         [SerializeField] private RectTransform panelRectTransform;
-        [SerializeField] private int rows = 2;
-        [SerializeField] private int columns = 2;
-        [SerializeField] private Vector2 spacing = new Vector2(10f, 10f);
 
-        private List<Card> cards = new List<Card>();
         public static event Action<List<Card>> OnCardPopulated;
 
         void Start()
         {
-            UpdateLayout();
+            UpdateLayout(gameSetting.rows, gameSetting.columns, gameSetting.spacing);
             SpawnCards();
         }
-
-        // Optional: Change layout at runtime
-        public void SetLayout(int newRows, int newCols)
-        {
-            rows = newRows;
-            columns = newCols;
-            UpdateLayout();
-        }
-
-
-        private void UpdateLayout()
+        private void UpdateLayout(int rows , int cols , Vector2 spacing)
         {
             float availableWidth = panelRectTransform.rect.width;
             float availableHeight = panelRectTransform.rect.height;
 
-            float cellWidth = (availableWidth - spacing.x * (columns - 1)) / columns;
+            float cellWidth = (availableWidth - spacing.x * (cols - 1)) / cols;
             float cellHeight = (availableHeight - spacing.y * (rows - 1)) / rows;
 
             gridLayout.cellSize = new Vector2(cellWidth, cellHeight);
             gridLayout.spacing = spacing;
             gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            gridLayout.constraintCount = columns;
+            gridLayout.constraintCount = cols;
         }
         private void SpawnCards()
         {
-            for (int i = 0; i < rows; i++)
+            List<Card> cards = new List<Card>();
+            for (int i = 0; i < gameSetting.rows; i++)
             {
-                for (int j = 0; j < columns; j++)
+                for (int j = 0; j < gameSetting.columns; j++)
                 {
                     GameObject go = poolCards.PoolGameobject.Get();
                     go.transform.SetParent(panelRectTransform, true);

@@ -7,7 +7,7 @@ namespace MemoryGame
 {
     public class ReturnToPool : MonoBehaviour
     {
-        public IObjectPool<GameObject> pool;
+        public IObjectPool<GameObject> pool { get; set; }
 
         public void ReturnToPoolGameobject()
         {
