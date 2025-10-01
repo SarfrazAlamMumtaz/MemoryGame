@@ -9,6 +9,11 @@ namespace MemoryGame
     {
         [SerializeField] private GameObject cardVisual;
         private bool toggle = false;
+
+        private void Start()
+        {
+            VisualState(false);
+        }
         public void OnPointerDown(PointerEventData eventData)
         {
             Debug.Log($"Clicked cell at" + gameObject);
@@ -19,7 +24,12 @@ namespace MemoryGame
         private void ToggleVisual()
         {
             toggle = !toggle;
-            cardVisual.SetActive(toggle);
+            VisualState(toggle);
+        }
+
+        private void VisualState(bool state)
+        {
+            cardVisual.SetActive(state);
         }
     }
 
