@@ -12,20 +12,23 @@ namespace MemoryGame
         private List<Card> cards = new List<Card>();
         private bool busy = false;
 
-        public static event Action OnWinCheckerReset;
-
         private void Awake()
         {
             returnToPool = GetComponent<IReturnToPool>();
+            ResetWinChecker();
         }
-        public void OnCardClicked(Card card)
+        public void ResetWinChecker()
+        {
+            busy = false;
+            gameObject.SetActive(true);
+        }
+        public void OnCardClicked(Card card, GameController gameController)
         {
             if (busy) return;
 
-            StopAllCoroutines();
-            StartCoroutine(UpdateWinChecker(card));
+            StartCoroutine(UpdateWinChecker(card, gameController));
         }
-        private IEnumerator UpdateWinChecker(Card card)
+        private IEnumerator UpdateWinChecker(Card card, GameController gameController)
         {
             cards.Add(card);
 
@@ -33,30 +36,38 @@ namespace MemoryGame
             {
                 busy = true;
 
-                yield return new WaitForSeconds(1);
-                if (CheckForWin())
+                if (Won())
                 {
+                    gameController.ResetlastWinChecker();
+                    Debug.Log("Win");
+                    yield return new WaitForSeconds(1);
+
                     foreach (var item in cards)
                     {
-                        item.gameObject.SetActive(false);
+                        item.HideCardGameobject();
                     }
                 }
                 else
                 {
+                    gameController.ResetlastWinChecker();
                     Debug.Log("Lose");
+                    yield return new WaitForSeconds(1);
+
+                    foreach (var item in cards)
+                    {
+                        item.ResetCard();
+                    }
                 }
 
-                cards.Clear();
-
-                OnWinCheckerReset?.Invoke();
-
                 returnToPool.ReturnToPoolGameobject();
+
+                cards.Clear();
 
                 busy = false;
             }
         }
 
-        private bool CheckForWin()
+        private bool Won()
         {
             bool matched = cards.All(value => value.id == cards[0].id);
             return matched;
@@ -65,7 +76,6 @@ namespace MemoryGame
         {
             return busy;
         }
-
         private void OnDisable()
         {
             StopAllCoroutines();

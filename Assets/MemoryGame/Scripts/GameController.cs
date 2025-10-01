@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace MemoryGame
@@ -25,20 +26,24 @@ namespace MemoryGame
         {
             Card.OnCardClicked -= OnCardClicked;
         }
-
         private void OnCardClicked(Card card)
         {
-            if(lastWinChecker != null && lastWinChecker.IsBusy() == false)
+            if (lastWinChecker != null && lastWinChecker.IsBusy() == false)
             {
-                lastWinChecker.OnCardClicked(card);
+                lastWinChecker.OnCardClicked(card,this);
             }
             else
             {
                 GameObject go = winCheckerPool.PoolGameobject.Get();
-                lastWinChecker = go.GetComponent<WinChecker>();
-
-                lastWinChecker.OnCardClicked(card);
+                var pool_wc = go.GetComponent<WinChecker>();
+                lastWinChecker = pool_wc;
+                lastWinChecker.ResetWinChecker();
+                lastWinChecker.OnCardClicked(card,this);
             }
+        }
+        public void ResetlastWinChecker()
+        {
+            lastWinChecker = null;
         }
         private void SetupGame()
         {

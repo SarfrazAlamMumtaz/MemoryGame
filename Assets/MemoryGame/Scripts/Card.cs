@@ -25,9 +25,13 @@ namespace MemoryGame
             if (active) return;
 
             OnCardClicked?.Invoke(this);
-            ToggleVisual();
+            VisualState(true);
         }
-
+        public void ResetCard()
+        {
+            active = false;
+            VisualState(false);
+        }
         public void UpdateCard(int id)
         {
             this.id = id;
@@ -35,16 +39,13 @@ namespace MemoryGame
             //remove before commit
             textVisual.SetText(id.ToString());
         }
-
-        private void ToggleVisual()
-        {
-            active = !active;
-            VisualState(active);
-        }
-
         private void VisualState(bool state)
         {
             cardVisual.SetActive(state);
+        }
+        public void HideCardGameobject()
+        {
+            gameObject.SetActive(false);
         }
     }
 
