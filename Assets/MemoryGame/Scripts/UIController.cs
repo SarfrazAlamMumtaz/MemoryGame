@@ -15,6 +15,7 @@ namespace MemoryGame
         [SerializeField] private TextMeshProUGUI layoutText;
         [SerializeField] private TextMeshProUGUI scoreText;
         [SerializeField] private TextMeshProUGUI turnText;
+        [SerializeField] private GameObject loadingpanel;
 
         private StringBuilder scoreSB = new StringBuilder();
         private StringBuilder turnSB = new StringBuilder();

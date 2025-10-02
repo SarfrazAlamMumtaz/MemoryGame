@@ -38,7 +38,7 @@ namespace MemoryGame
 
                 if (Won())
                 {
-                    gameController.OnWin();
+                    gameController.OnCorrectPair();
                     yield return new WaitForSeconds(1);
 
                     foreach (var item in cards)

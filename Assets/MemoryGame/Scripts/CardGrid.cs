@@ -14,6 +14,11 @@ namespace MemoryGame
         [SerializeField] private GridLayoutGroup gridLayout;
         [SerializeField] private RectTransform panelRectTransform;
 
+        public UnityEvent OnLoadingStarted;
+        public UnityEvent OnLoadingFinished;
+
+        private List<Card> spawnedCards = new List<Card>(); 
+
         private void OnEnable()
         {
             GameController.OnGameStart += SetupBoard;
@@ -23,7 +28,7 @@ namespace MemoryGame
             GameController.OnGameStart -= SetupBoard;
             StopAllCoroutines();
         }
-        private void SetupBoard(List<int> cards)
+        private void SetupBoard(List<CardData> cards)
         {
             UpdateLayout(gameSetting.rows, gameSetting.columns,new Vector2(10,10));
             SpawnCards(cards);
@@ -41,12 +46,16 @@ namespace MemoryGame
             gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             gridLayout.constraintCount = cols;
         }
-        private void SpawnCards(List<int> cards)
+        private void SpawnCards(List<CardData> cards)
         {
             StartCoroutine(SpawnCardRoutine(cards));
         }
-        private IEnumerator SpawnCardRoutine(List<int> cards)
+        private IEnumerator SpawnCardRoutine(List<CardData> cards)
         {
+            OnLoadingStarted.Invoke();
+
+            spawnedCards.Clear();
+
             foreach (RectTransform card in panelRectTransform)
             {
                 card.gameObject.GetComponent<IReturnToPool>().ReturnToPoolGameobject();
@@ -54,20 +63,31 @@ namespace MemoryGame
 
             gridLayout.enabled = true;
 
-            int count = cards.Count;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < cards.Count; i++)
             {
                 GameObject go = poolCards.PoolGameobject.Get();
                 go.transform.SetParent(panelRectTransform, true);
                 go.transform.localScale = Vector3.one;
 
                 Card card = go.GetComponent<Card>();
-                card.UpdateCard(cards[i]);
+
+                spawnedCards.Add(card);
             }
 
             yield return new WaitForSeconds(1);
 
             gridLayout.enabled = false;
+
+            for (int i = 0; i < cards.Count; i++)
+            {
+                spawnedCards[i].UpdateCard(cards[i].cardID, cards[i].isMatched);
+            }
+
+            OnLoadingFinished.Invoke();
+        }
+        public List<Card> GetCards()
+        {
+            return spawnedCards;
         }
     }
 }

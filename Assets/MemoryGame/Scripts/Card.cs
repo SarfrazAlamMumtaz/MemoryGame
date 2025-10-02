@@ -1,5 +1,6 @@
 ﻿using DG.Tweening;
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,19 +14,20 @@ namespace MemoryGame
         [SerializeField] private TextMeshProUGUI textVisual;
 
         public int id { get; private set; }
-
-        private bool active = false;
+        public bool active { get; private set; }
 
         public static event Action<Card> OnCardClicked;
-
-        private void Start()
+     
+        private void OnEnable()
         {
             VisualState(false);
-            //CardFlip();
         }
+
         public void OnPointerDown(PointerEventData eventData)
         {
             if (active) return;
+
+            active = true;
 
             OnCardClicked?.Invoke(this);
             VisualState(true);
@@ -36,12 +38,16 @@ namespace MemoryGame
             active = false;
             VisualState(false);
         }
-        public void UpdateCard(int id)
+        public void UpdateCard(int id,bool active)
         {
             this.id = id;
+            this.active = active;
 
             //remove before commit
             textVisual.SetText(id.ToString());
+  
+            if (active)
+                HideCardGameobject();
         }
         private void VisualState(bool state)
         {
@@ -55,15 +61,15 @@ namespace MemoryGame
         {
             Sequence flipSeq = DOTween.Sequence();
             flipSeq.Append(rectTransform.DOLocalRotate(new Vector3(0, 360, 0), 4f,RotateMode.FastBeyond360).SetEase(Ease.Linear));
-            flipSeq.InsertCallback(1f, Method1);
-            flipSeq.InsertCallback(3f, Method2);
+            flipSeq.InsertCallback(1f, FrontFace);
+            flipSeq.InsertCallback(3f, BackFace);
         }
-        void Method1()
+        void FrontFace()
         {
             VisualState(true);
         }
 
-        void Method2()
+        void BackFace()
         {
             VisualState(false);
         }

@@ -12,7 +12,19 @@ namespace MemoryGame
 
         public static event Action<int> OnScoreChanged;
         public static event Action<int> OnTurnChanged;
-       
+
+        public void UpdateScore(int amount)
+        {
+            Score = amount;
+            OnScoreChanged?.Invoke(Score);
+        }
+        public void UpdateTurn(int amount)
+        {
+            Turn = amount;
+            OnTurnChanged?.Invoke(Turn);
+        }
+
+
         public void AddScore()
         {
             Score += 1;
@@ -31,6 +43,14 @@ namespace MemoryGame
             Turn = 0;
             OnScoreChanged?.Invoke(Score);
             OnTurnChanged?.Invoke(Turn);
+        }
+        public int GetScore()
+        {
+            return Score;
+        }
+        public int GetTurn()
+        {
+            return Turn;
         }
     }
 }
