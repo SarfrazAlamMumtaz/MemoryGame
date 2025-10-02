@@ -38,7 +38,12 @@ namespace MemoryGame
 
                 if (Won())
                 {
+                    foreach (var item in cards)
+                    {
+                        item.ShakeCardScale();
+                    }
                     gameController.OnCorrectPair();
+
                     yield return new WaitForSeconds(1);
 
                     foreach (var item in cards)

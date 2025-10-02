@@ -31,13 +31,15 @@ namespace MemoryGame
             active = true;
 
             OnCardClicked?.Invoke(this);
-            VisualState(true);
-       
+
+            CardFlip();
         }
         public void ResetCard()
         {
             active = false;
             VisualState(false);
+            Sequence flipSeq = DOTween.Sequence();
+            flipSeq.Append(rectTransform.DOLocalRotate(new Vector3(0, 0, 0), 0.2f, RotateMode.FastBeyond360).SetEase(Ease.Linear));
         }
         public void UpdateCard(int id,bool active)
         {
@@ -60,9 +62,8 @@ namespace MemoryGame
         public void CardFlip()
         {
             Sequence flipSeq = DOTween.Sequence();
-            flipSeq.Append(rectTransform.DOLocalRotate(new Vector3(0, 360, 0), 4f,RotateMode.FastBeyond360).SetEase(Ease.Linear));
-            flipSeq.InsertCallback(1f, FrontFace);
-            flipSeq.InsertCallback(3f, BackFace);
+            flipSeq.Append(rectTransform.DOLocalRotate(new Vector3(0, 180, 0), 0.2f, RotateMode.FastBeyond360).SetEase(Ease.Linear));
+            flipSeq.InsertCallback(0.1f, FrontFace);
         }
         void FrontFace()
         {
@@ -73,6 +74,11 @@ namespace MemoryGame
         {
             VisualState(false);
         }
+        public void ShakeCardScale()
+        {
+            rectTransform.DOShakeScale(0.3f, 0.2f, 10, 90, false, ShakeRandomnessMode.Full);
+        }
+
     }
 
 }
