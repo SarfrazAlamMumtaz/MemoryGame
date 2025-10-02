@@ -16,10 +16,6 @@ namespace MemoryGame
         private StringBuilder scoreSB = new StringBuilder();
         private StringBuilder turnSB = new StringBuilder();
 
-        void Start()
-        {
-            LayoutDisplay();
-        }
         private void OnEnable()
         {
             ScoreSystem.OnScoreChanged += UpdateScoreUI;

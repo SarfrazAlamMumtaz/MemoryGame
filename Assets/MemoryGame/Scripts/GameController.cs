@@ -1,9 +1,11 @@
 using DG.Tweening;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 namespace MemoryGame
 {
@@ -36,6 +38,7 @@ namespace MemoryGame
                 scoreSystem.UpdateTurn(gameSaveData.turn);
 
                 List<CardData> cardList = new List<CardData>();
+                
                 foreach (var card in gameSaveData.cards)
                 {
                     cardList.Add(new CardData(card.cardID,card.isMatched));
@@ -46,8 +49,6 @@ namespace MemoryGame
             () =>
             {  
                 //Load new game
-                gameSetting.rows = 2;
-                gameSetting.columns = 3;
                 SetupNewGame();
 
             });
@@ -147,6 +148,20 @@ namespace MemoryGame
             cardList.Shuffle();
 
             OnGameStart?.Invoke(cardList);
+        }
+        public void RestartGame()
+        {
+            StartCoroutine(LoadYourScene());
+        }
+        IEnumerator LoadYourScene()
+        {
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Game");
+
+            while (!asyncLoad.isDone)
+            {
+                // You can use asyncLoad.progress for a loading bar
+                yield return null;
+            }
         }
     }
 }

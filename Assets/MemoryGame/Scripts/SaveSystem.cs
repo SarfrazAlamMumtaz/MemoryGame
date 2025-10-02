@@ -12,7 +12,6 @@ namespace MemoryGame
         void Awake()
         {
             savePath = Application.persistentDataPath + "/save.json";
-            Debug.Log(savePath);
         }
         public void OnGameSave(List<Card> cards, GameSaveData gameSaveData)
         {
