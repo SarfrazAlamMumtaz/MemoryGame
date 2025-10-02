@@ -28,10 +28,10 @@ namespace MemoryGame
             GameController.OnGameStart -= SetupBoard;
             StopAllCoroutines();
         }
-        private void SetupBoard(List<CardData> cards)
+        private void SetupBoard(List<CardData> cards, bool showCards)
         {
             UpdateLayout(gameSetting.rows, gameSetting.columns,new Vector2(10,10));
-            SpawnCards(cards);
+            SpawnCards(cards, showCards);
         }
         private void UpdateLayout(int rows , int cols , Vector2 spacing)
         {
@@ -46,11 +46,11 @@ namespace MemoryGame
             gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             gridLayout.constraintCount = cols;
         }
-        private void SpawnCards(List<CardData> cards)
+        private void SpawnCards(List<CardData> cards, bool showCards)
         {
-            StartCoroutine(SpawnCardRoutine(cards));
+            StartCoroutine(SpawnCardRoutine(cards, showCards));
         }
-        private IEnumerator SpawnCardRoutine(List<CardData> cards)
+        private IEnumerator SpawnCardRoutine(List<CardData> cards,bool showCards)
         {
             OnLoadingStarted.Invoke();
 
@@ -81,7 +81,7 @@ namespace MemoryGame
 
             for (int i = 0; i < cards.Count; i++)
             {
-                spawnedCards[i].UpdateCard(cards[i].cardID, cards[i].isMatched);
+                spawnedCards[i].UpdateCard(cards[i].cardID, cards[i].isMatched, showCards);
             }
 
             OnLoadingFinished.Invoke();

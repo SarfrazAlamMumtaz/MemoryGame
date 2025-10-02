@@ -21,7 +21,7 @@ namespace MemoryGame
         public UnityEvent EventFlipCard;
         public UnityEvent EventGameover;
 
-        public static event Action<List<CardData>> OnGameStart;
+        public static event Action<List<CardData>, bool> OnGameStart;
 
         private WinChecker lastWinChecker;
 
@@ -44,7 +44,7 @@ namespace MemoryGame
                     cardList.Add(new CardData(card.cardID,card.isMatched));
                 }
               
-                OnGameStart?.Invoke(cardList);
+                OnGameStart?.Invoke(cardList,false);
             },
             () =>
             {  
@@ -147,7 +147,7 @@ namespace MemoryGame
             // Shuffle the list
             cardList.Shuffle();
 
-            OnGameStart?.Invoke(cardList);
+            OnGameStart?.Invoke(cardList,true);
         }
         public void RestartGame()
         {
