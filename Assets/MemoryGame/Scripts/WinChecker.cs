@@ -12,8 +12,6 @@ namespace MemoryGame
         private List<Card> cards = new List<Card>();
         private bool busy = false;
 
-        public static event Action OnNewWinCheckerSpawn;
-
         private void Awake()
         {
             returnToPool = GetComponent<IReturnToPool>();

@@ -315,6 +315,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be6c5a4a2a02404439fb65a1a608fe9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rectTransform: {fileID: 8809050600282702254}
   cardVisual: {fileID: 8809050600291036569}
   textVisual: {fileID: 9017988735334331722}
 --- !u!1 &8809050600291036569

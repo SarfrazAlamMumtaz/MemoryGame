@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace MemoryGame
 {
@@ -10,14 +11,17 @@ namespace MemoryGame
         [SerializeField] private GameSetting gameSetting;
         [SerializeField] private Pool winCheckerPool;
 
+        public UnityEvent EventStartGame;
+        public UnityEvent EventWin;
+        public UnityEvent EventLose;
+
         public static event Action<List<int>> OnGameStart;
-        public static event Action ActionWin;
-        public static event Action ActionTurn;
 
         private WinChecker lastWinChecker;
 
         private void Start()
         {
+            EventStartGame.Invoke();
             SetupGame();
         }
         private void OnEnable()
@@ -30,13 +34,13 @@ namespace MemoryGame
         }
         public void OnWin()
         {
-            ActionTurn.Invoke();
-            ActionWin.Invoke();
+            EventWin.Invoke();
             ResetlastWinChecker();
         }
         public void OnLose()
         {
-            ActionTurn.Invoke();
+            EventLose.Invoke();
+         
             ResetlastWinChecker();
         }
         private void OnCardClicked(Card card)

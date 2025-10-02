@@ -16,29 +16,23 @@ namespace MemoryGame
         [SerializeField] private TextMeshProUGUI scoreText;
         [SerializeField] private TextMeshProUGUI turnText;
 
-        private int score;
-        private int turn;
-
         private StringBuilder scoreSB = new StringBuilder();
         private StringBuilder turnSB = new StringBuilder();
 
         void Start()
         {
-            score = 0;
-            turn = 0;
-
             LayoutDisplay();
         }
         private void OnEnable()
         {
-            GameController.ActionWin += UpdateScoreByOne;
-            GameController.ActionTurn += UpdateTurn;
+            ScoreSystem.OnScoreChanged += UpdateScoreUI;
+            ScoreSystem.OnTurnChanged += UpdateTurnUI;
         }
 
         private void OnDisable()
         {
-            GameController.ActionWin -= UpdateScoreByOne;
-            GameController.ActionTurn -= UpdateTurn;
+            ScoreSystem.OnScoreChanged -= UpdateScoreUI;
+            ScoreSystem.OnTurnChanged -= UpdateTurnUI;
         }
         public void LayoutDisplay()
         {
@@ -50,20 +44,16 @@ namespace MemoryGame
  
             layoutText.SetText(layout);
         }
-        public void UpdateScoreByOne()
+        public void UpdateScoreUI(int score)
         {
-            score++;
-
             scoreSB.Clear();
             scoreSB.Append("Matched : ");
             scoreSB.Append(score);
 
             scoreText.SetText(scoreSB);
         }
-        private void UpdateTurn()
+        private void UpdateTurnUI(int turn)
         {
-            turn++;
-
             turnSB.Clear();
             turnSB.Append("Turn : ");
             turnSB.Append(turn);
