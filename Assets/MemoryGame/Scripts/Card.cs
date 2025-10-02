@@ -1,18 +1,19 @@
 ﻿using DG.Tweening;
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace MemoryGame
 {
     public class Card : MonoBehaviour, IPointerDownHandler
     {
         [SerializeField] private RectTransform rectTransform;
-        [SerializeField] private GameObject cardVisual;
-        [SerializeField] private TextMeshProUGUI textVisual;
-
+        [SerializeField] private GameObject cardVisualHolder;
+        [SerializeField] private Image cardVisual;
+        [SerializeField] private List<Sprite> cardTypes = new List<Sprite>();
         public int id { get; private set; }
         public bool active { get; private set; }
 
@@ -42,16 +43,15 @@ namespace MemoryGame
         {
             this.id = id;
             this.active = active;
+            
+            cardVisual.sprite = cardTypes[id];
 
-            //remove before commit
-            textVisual.SetText(id.ToString());
-  
             if (active)
                 HideCardGameobject();
         }
         private void VisualState(bool state)
         {
-            cardVisual.SetActive(state);
+            cardVisualHolder.SetActive(state);
         }
         public void HideCardGameobject()
         {

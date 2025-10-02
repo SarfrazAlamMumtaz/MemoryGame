@@ -68,15 +68,16 @@ namespace MemoryGame
                 GameObject go = poolCards.PoolGameobject.Get();
                 go.transform.SetParent(panelRectTransform, true);
                 go.transform.localScale = Vector3.one;
-
+               
                 Card card = go.GetComponent<Card>();
-
                 spawnedCards.Add(card);
             }
 
             yield return new WaitForSeconds(1);
 
             gridLayout.enabled = false;
+
+            yield return new WaitForSeconds(1);
 
             for (int i = 0; i < cards.Count; i++)
             {

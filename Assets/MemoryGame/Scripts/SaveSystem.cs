@@ -1,10 +1,7 @@
-using DG.Tweening.Core.Easing;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 
 namespace MemoryGame
 {
@@ -15,6 +12,7 @@ namespace MemoryGame
         void Awake()
         {
             savePath = Application.persistentDataPath + "/save.json";
+            Debug.Log(savePath);
         }
         public void OnGameSave(List<Card> cards, GameSaveData gameSaveData)
         {
