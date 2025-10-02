@@ -6,17 +6,40 @@ namespace MemoryGame
 {
     public class SoundSystem : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
-        {
+        [Header("Audio Sources")]
+        [SerializeField] private AudioSource sfxSource;
 
+        [SerializeField] private AudioClip flipSound;
+        [SerializeField] private AudioClip matchSound;
+        [SerializeField] private AudioClip mismatchSound;
+        [SerializeField] private AudioClip gameOverSound;
+
+        public void PlayFlip()
+        {
+            PlaySound(flipSound);
         }
 
-        // Update is called once per frame
-        void Update()
+        public void PlayMatch()
         {
-
+            PlaySound(matchSound);
         }
+
+        public void PlayMismatch()
+        {
+            PlaySound(mismatchSound);
+        }
+
+        public void PlayGameOver()
+        {
+            PlaySound(gameOverSound);
+        }
+
+        private void PlaySound(AudioClip clip)
+        {
+            if (clip != null)
+                sfxSource.PlayOneShot(clip);
+        }
+
     }
 }
 

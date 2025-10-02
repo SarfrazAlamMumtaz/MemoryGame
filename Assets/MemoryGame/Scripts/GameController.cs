@@ -14,6 +14,8 @@ namespace MemoryGame
         public UnityEvent EventStartGame;
         public UnityEvent EventWin;
         public UnityEvent EventLose;
+        public UnityEvent EventFlipCard;
+        public UnityEvent EventGameover;
 
         public static event Action<List<int>> OnGameStart;
 
@@ -57,6 +59,8 @@ namespace MemoryGame
                 lastWinChecker.ResetWinChecker();
                 lastWinChecker.OnCardClicked(card,this);
             }
+
+            EventFlipCard.Invoke();
         }
         private void ResetlastWinChecker()
         {

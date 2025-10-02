@@ -21,7 +21,7 @@ namespace MemoryGame
         private void Start()
         {
             VisualState(false);
-            CardFlip();
+            //CardFlip();
         }
         public void OnPointerDown(PointerEventData eventData)
         {
